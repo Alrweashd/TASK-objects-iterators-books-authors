@@ -10,8 +10,13 @@ const books = require("./books.json");
  ****************************************************************/
 function getBookById(bookId, books) {
   // Your code goes here
+  let match = books.find((i) => i.id == bookId);
+  if (match) return books.find((i) => i.id == bookId);
+  else return "undefined";
 }
-// console.log(getBookById(12, books));
+
+console.log(getBookById(12, books));
+console.log(getBookById(0, books));
 
 /**************************************************************
  * getAuthorByName(authorName, authors):
@@ -22,8 +27,16 @@ function getBookById(bookId, books) {
  ****************************************************************/
 function getAuthorByName(authorName, authors) {
   // Your code goes here
+  let match = authors.find(
+    (i) => i.name.toUpperCase() == authorName.toUpperCase()
+  );
+  if (match) return match;
+  else return "undefined";
+  //console.log(authors);
 }
-// console.log(getAuthorByName("J.K. Rowling", authors));
+console.log(getAuthorByName("J.K. Rowling", authors));
+
+console.log(getAuthorByName("J.k. roWling", authors));
 
 /**************************************************************
  * bookCountsByAuthor(authors):
@@ -33,8 +46,28 @@ function getAuthorByName(authorName, authors) {
  ****************************************************************/
 function bookCountsByAuthor(authors) {
   // Your code goes here
+  let newObj = [];
+  let temp = {
+    author: "d",
+    bookCount: 4,
+  };
+
+  for (let i = 0; i <= authors.length - 1; i++) {
+    const newTemp = new Object();
+    newTemp.author = authors[i].name;
+    newTemp.bookCount = authors[i].books;
+
+    newObj.push(newTemp);
+  }
+
+  let obj = {
+    author: authors.map((i) => i.name),
+    bookCount: authors.map((i) => i.books),
+  };
+
+  return newObj;
 }
-// console.log(bookCountsByAuthor(authors));
+console.log(bookCountsByAuthor(authors));
 
 /**************************************************************
  * booksByColor(books):
