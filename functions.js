@@ -11,8 +11,8 @@ const books = require("./books.json");
 function getBookById(bookId, books) {
   // Your code goes here
   let match = books.find((i) => i.id == bookId);
-  if (match) return match;
-  //else return "undefined";
+  if (!match) return "undefined";
+  return match;
 }
 
 //console.log(getBookById(12, books));
@@ -116,7 +116,7 @@ function booksByColor(books) {
 
 //   return colors;
 // }
-console.log(booksByColor(books));
+//console.log(booksByColor(books));
 
 /**************************************************************
  * titlesByAuthorName(authorName, authors, books):
@@ -128,8 +128,18 @@ console.log(booksByColor(books));
  ****************************************************************/
 function titlesByAuthorName(authorName, authors, books) {
   // Your code goes here
+  let author = getAuthorByName(authorName, authors);
+  if (!author) return console.log("Author is not found");
+  let booksIds = author.books;
+  //console.log(booksIds);
+  // let titles = [];
+  // booksIds.forEach((id) => {
+  //   titles.push(books.find((book) => book.id == id).title);
+  // });
+  return booksIds.map((id) => getBookById(id, books).title);
 }
-// console.log(titlesByAuthorName("George R.R. Martin", authors, books));
+
+//console.log(titlesByAuthorName("George R.R. Martin", authors, books));
 
 /**************************************************************
  * mostProlificAuthor(authors):
@@ -139,9 +149,11 @@ function titlesByAuthorName(authorName, authors, books) {
  * Note: assume there will never be a tie
  ****************************************************************/
 function mostProlificAuthor(authors) {
-  // Your code goes here
+  return [...authors].sort(
+    (auth1, auth2) => auth2.books.length - auth1.books.length
+  )[0].name;
 }
-// console.log(mostProlificAuthor(authors));
+//console.log(mostProlificAuthor(authors));
 
 /**************************************************************
  * relatedBooks(bookId, authors, books):
@@ -168,7 +180,18 @@ function mostProlificAuthor(authors) {
  ****************************************************************/
 function relatedBooks(bookId, authors, books) {
   // Your code goes here
+  let authsNames = getBookById(bookId, books).authors.map((auth) => auth.name);
+  console.log(authsNames);
+  let reBooks = [];
+  authsNames.forEach((name) => {
+    titlesByAuthorName(name, authors, books).forEach((title) => {
+      if (!reBooks.includes(title)) reBooks.push(title);
+    });
+  });
+  //authsNames.map((name) => titlesByAuthorName(name, authors, books));
+  console.log(reBooks);
 }
+relatedBooks(46, authors, books);
 // console.log(relatedBooks(50, authors, books));
 
 /**************************************************************
